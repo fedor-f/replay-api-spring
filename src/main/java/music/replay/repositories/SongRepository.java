@@ -21,9 +21,6 @@ public interface SongRepository extends JpaRepository<Song, Integer> {
     @Query(value = "SELECT DISTINCT album FROM topsongsinfo", nativeQuery = true)
     List<String> getAllAlbums();
 
-    @Query("SELECT s FROM Song s")
-    List<Song> getSongByRating(Sort sort);
-
     @Query("SELECT s FROM Song s WHERE s.artist = :artist")
     List<Song> getRecordsByArtist(@Param("artist") String artist);
 
@@ -32,4 +29,7 @@ public interface SongRepository extends JpaRepository<Song, Integer> {
 
     @Query("SELECT s FROM Song s WHERE s.genre = :genre")
     List<Song> getRecordsByGenre(@Param("genre") String genre);
+
+    @Query("SELECT s FROM Song s")
+    List<Song> getSortedRecords(Sort sort);
 }

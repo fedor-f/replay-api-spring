@@ -101,7 +101,7 @@ public class SongService {
     }
 
     public List<Song> getSongsByAlbumRating() {
-        return songRepository.getSongByRating(Sort.by("pitchforkAlbumRating").descending());
+        return songRepository.getSortedRecords(Sort.by("pitchforkAlbumRating").descending());
     }
 
     public List<Song> getSongsByArtist(String artist) {
@@ -114,5 +114,13 @@ public class SongService {
 
     public List<Song> getSongsByGenre(String genre) {
         return songRepository.getRecordsByGenre(genre);
+    }
+
+    public List<Song> getSongsSortedByDateAsc() {
+        return songRepository.getSortedRecords(Sort.by("releaseDate"));
+    }
+
+    public List<Song> getSongsSortedByDateDesc() {
+        return songRepository.getSortedRecords(Sort.by("releaseDate").descending());
     }
 }

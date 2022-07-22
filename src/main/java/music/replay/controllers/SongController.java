@@ -53,7 +53,7 @@ public class SongController {
         return songService.getAlbums();
     }
 
-    @GetMapping("/top")
+    @GetMapping("/top/rating")
     public List<Song> getTopSongs() {
         return songService.getSongsByAlbumRating();
     }
@@ -71,5 +71,15 @@ public class SongController {
     @GetMapping("/search/genres/{genre}")
     public List<Song> getSongsByGenre(@PathVariable String genre) {
         return songService.getSongsByGenre(genre);
+    }
+
+    @GetMapping("/top/date/asc")
+    public List<Song> getSongsSortedByDateAsc() {
+        return songService.getSongsSortedByDateAsc();
+    }
+
+    @GetMapping("/top/date/desc")
+    public List<Song> getSongsSortedByDateDesc() {
+        return songService.getSongsSortedByDateDesc();
     }
 }
