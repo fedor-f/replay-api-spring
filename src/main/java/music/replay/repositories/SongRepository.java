@@ -4,6 +4,7 @@ import music.replay.models.Song;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,4 +23,13 @@ public interface SongRepository extends JpaRepository<Song, Integer> {
 
     @Query("SELECT s FROM Song s")
     List<Song> getSongByRating(Sort sort);
+
+    @Query("SELECT s FROM Song s WHERE s.artist = :artist")
+    List<Song> getRecordsByArtist(@Param("artist") String artist);
+
+    @Query("SELECT s FROM Song s WHERE s.album = :album")
+    List<Song> getRecordsByAlbum(@Param("album") String album);
+
+    @Query("SELECT s FROM Song s WHERE s.genre = :genre")
+    List<Song> getRecordsByGenre(@Param("genre") String genre);
 }

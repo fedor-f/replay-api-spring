@@ -57,4 +57,19 @@ public class SongController {
     public List<Song> getTopSongs() {
         return songService.getSongsByAlbumRating();
     }
+
+    @GetMapping("/search/artists/{artist}")
+    public List<Song> getSongsByArtist(@PathVariable String artist) {
+        return songService.getSongsByArtist(artist);
+    }
+
+    @GetMapping("/search/albums/{album}")
+    public List<Song> getSongsByAlbum(@PathVariable String album) {
+        return songService.getSongsByAlbum(album);
+    }
+
+    @GetMapping("/search/genres/{genre}")
+    public List<Song> getSongsByGenre(@PathVariable String genre) {
+        return songService.getSongsByGenre(genre);
+    }
 }
