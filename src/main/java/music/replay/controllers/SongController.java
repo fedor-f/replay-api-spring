@@ -38,22 +38,22 @@ public class SongController {
         return songService.updateSong(song);
     }
 
-    @GetMapping(path = "/genres")
+    @GetMapping("/genres")
     public List<String> getGenres() {
         return songService.getGenres();
     }
 
-    @GetMapping(path = "/artists")
+    @GetMapping("/artists")
     public List<String> getArtists() {
         return songService.getArtists();
     }
 
-    @GetMapping(path = "/albums")
+    @GetMapping("/albums")
     public List<String> getAlbums() {
         return songService.getAlbums();
     }
 
-    @GetMapping(path = "/top")
+    @GetMapping("/top")
     public List<Song> getTopSongs() {
         return songService.getSongsByAlbumRating();
     }

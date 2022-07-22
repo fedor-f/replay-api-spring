@@ -20,21 +20,22 @@ public class SongService {
     public SongService(SongRepository songRepository) {
         this.songRepository = songRepository;
     }
+
     public List<Song> getSongs() {
         return songRepository.findAll();
     }
 
     public List<Song> addNewSong(Song song) {
+        if (song == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request body is null");
+        }
+
         boolean doesSongNameExist =
                 songRepository.findAll().stream().anyMatch(s -> s.getSongName().equals(song.getSongName()));
         boolean doesAlbumNameExist =
                 songRepository.findAll().stream().anyMatch(s -> s.getAlbum().equals(song.getAlbum()));
         boolean doesArtistExist =
                 songRepository.findAll().stream().anyMatch(s -> s.getArtist().equals(song.getArtist()));
-
-        if (song == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request body is null");
-        }
 
         if (doesSongNameExist && doesAlbumNameExist && doesArtistExist) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "The item already exists");
