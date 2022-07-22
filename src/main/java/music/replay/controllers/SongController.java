@@ -37,4 +37,24 @@ public class SongController {
     public Song updateSong(@RequestBody Song song) {
         return songService.updateSong(song);
     }
+
+    @GetMapping(path = "/genres")
+    public List<String> getGenres() {
+        return songService.getGenres();
+    }
+
+    @GetMapping(path = "/artists")
+    public List<String> getArtists() {
+        return songService.getArtists();
+    }
+
+    @GetMapping(path = "/albums")
+    public List<String> getAlbums() {
+        return songService.getAlbums();
+    }
+
+    @GetMapping(path = "/top")
+    public List<Song> getTopSongs() {
+        return songService.getSongsByAlbumRating();
+    }
 }

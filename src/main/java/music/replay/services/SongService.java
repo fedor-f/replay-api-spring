@@ -3,6 +3,7 @@ package music.replay.services;
 import music.replay.models.Song;
 import music.replay.repositories.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,5 +49,21 @@ public class SongService {
 
         songRepository.save(uhh.get());
         return uhh.get();
+    }
+
+    public List<String> getGenres() {
+        return songRepository.getAllGenres();
+    }
+
+    public List<String> getArtists() {
+        return songRepository.getAllArtists();
+    }
+
+    public List<String> getAlbums() {
+        return songRepository.getAllAlbums();
+    }
+
+    public List<Song> getSongsByAlbumRating() {
+        return songRepository.getSongByRating(Sort.by("pitchforkAlbumRating").descending());
     }
 }
