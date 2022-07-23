@@ -1,0 +1,36 @@
+.song {
+    float: left;
+}
+
+#list {
+    list-style: none;
+}
+
+.background {
+    border-radius: 20px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+
+p {
+    font-family: Arial, sans-serif;
+    padding-left: 100px;
+}
+
+h1 {
+    font-family: Arial, sans-serif;
+}
+
+h3 {
+    font-family: Arial, sans-serif;
+    padding-left: 100px;
+}
+
+h5 {
+    font-family: Arial, sans-serif;
+    padding-left: 100px;
+}
+
+div {
+    padding-left: 75px;
+}
