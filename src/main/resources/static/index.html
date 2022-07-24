@@ -11,6 +11,22 @@
 <body>
 <h1>Replay</h1>
 <p></p>
-<li id="list"></li>
+<label for="criteria">Criteria: </label>
+<select name="criteria" id="criteria">
+    <option value="default">Most listened</option>
+    <option value="album-rating">Album rating</option>
+    <option value="release-date">Release date</option>
+</select>
+
+<label for="order">Criteria: </label>
+<select name="order" id="order">
+    <option value="ascending">Ascending</option>
+    <option value="descending">Descending</option>
+</select>
+
+<button type="button" onclick="sortSomehow()">Sort</button>
+<div id="container">
+    <ul id="list"></ul>
+</div>
 </body>
 </html>

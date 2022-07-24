@@ -1,6 +1,7 @@
 package music.replay.controllers;
 
 import music.replay.models.Song;
+import music.replay.models.SortParameters;
 import music.replay.services.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,11 @@ public class SongController {
         return songService.addNewSong(song);
     }
 
+    @PostMapping("/sort")
+    public List<Song> getSortedListByCriteria(@RequestBody SortParameters sortParameters) {
+        return songService.sortByCriteria(sortParameters);
+    }
+
     @DeleteMapping
     public List<Song> deleteSong(@RequestBody Integer id) {
         return songService.deleteSong(id);
@@ -53,11 +59,6 @@ public class SongController {
         return songService.getAlbums();
     }
 
-    @GetMapping("/top/rating")
-    public List<Song> getTopSongs() {
-        return songService.getSongsByAlbumRating();
-    }
-
     @GetMapping("/search/artists/{artist}")
     public List<Song> getSongsByArtist(@PathVariable String artist) {
         return songService.getSongsByArtist(artist);
@@ -71,15 +72,5 @@ public class SongController {
     @GetMapping("/search/genres/{genre}")
     public List<Song> getSongsByGenre(@PathVariable String genre) {
         return songService.getSongsByGenre(genre);
-    }
-
-    @GetMapping("/top/date/asc")
-    public List<Song> getSongsSortedByDateAsc() {
-        return songService.getSongsSortedByDateAsc();
-    }
-
-    @GetMapping("/top/date/desc")
-    public List<Song> getSongsSortedByDateDesc() {
-        return songService.getSongsSortedByDateDesc();
     }
 }

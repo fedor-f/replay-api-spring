@@ -1,6 +1,8 @@
 package music.replay.services;
 
 import music.replay.models.Song;
+import music.replay.models.SortParameters;
+import music.replay.parser.SortParser;
 import music.replay.repositories.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -100,10 +102,6 @@ public class SongService {
         return songRepository.getAllAlbums();
     }
 
-    public List<Song> getSongsByAlbumRating() {
-        return songRepository.getSortedRecords(Sort.by("pitchforkAlbumRating").descending());
-    }
-
     public List<Song> getSongsByArtist(String artist) {
         return songRepository.getRecordsByArtist(artist);
     }
@@ -116,11 +114,21 @@ public class SongService {
         return songRepository.getRecordsByGenre(genre);
     }
 
-    public List<Song> getSongsSortedByDateAsc() {
-        return songRepository.getSortedRecords(Sort.by("releaseDate"));
-    }
+    public List<Song> sortByCriteria(SortParameters sortParameters) {
+        if (sortParameters == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request body is null");
+        }
 
-    public List<Song> getSongsSortedByDateDesc() {
-        return songRepository.getSortedRecords(Sort.by("releaseDate").descending());
+        try {
+            SortParser.parseSortParams(sortParameters);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not resolve the given criteria");
+        }
+
+        if (sortParameters.getOrder().equals("Ascending")) {
+            return songRepository.getSortedRecords(Sort.by(sortParameters.getCriteria()));
+        }
+
+        return songRepository.getSortedRecords(Sort.by(sortParameters.getCriteria()).descending());
     }
 }
