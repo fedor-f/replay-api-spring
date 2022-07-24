@@ -9,8 +9,26 @@
     <script src="script.js"></script>
 </head>
 <body>
-<h1>Replay</h1>
-<p></p>
+<h1>Replay</h1><br>
+<h2>Search</h2><br>
+
+<label for="artists">Artists: </label>
+<select name="artists" id="artists"></select>
+<button type="button" onclick="displaySongsByCategory('artists', document.getElementById('artists').value)">Search</button>
+<br>
+
+<label for="albums">Albums: </label>
+<select name="albums" id="albums"></select>
+<button type="button" onclick="displaySongsByCategory('albums', document.getElementById('albums').value)">Search</button>
+<br>
+
+<label for="genres">Genres: </label>
+<select name="genres" id="genres"></select>
+<button type="button" onclick="displaySongsByCategory('genres', document.getElementById('genres').value)">Search</button>
+<br>
+
+<h2>Sort</h2>
+<br>
 <label for="criteria">Criteria: </label>
 <select name="criteria" id="criteria">
     <option value="default">Most listened</option>
@@ -24,7 +42,8 @@
     <option value="descending">Descending</option>
 </select>
 
-<button type="button" onclick="sortSomehow()">Sort</button>
+<button type="button" onclick="sortSomehow()">Sort</button><br>
+
 <div id="container">
     <ul id="list"></ul>
 </div>

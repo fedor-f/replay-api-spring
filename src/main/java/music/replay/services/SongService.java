@@ -103,15 +103,53 @@ public class SongService {
     }
 
     public List<Song> getSongsByArtist(String artist) {
-        return songRepository.getRecordsByArtist(artist);
+        if (artist == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Path variable is null");
+        }
+
+        boolean doesArtistExist =
+                songRepository.findAll().stream().anyMatch(s -> s.getArtist().equals(artist));
+
+        if (doesArtistExist) {
+            return songRepository.getRecordsByArtist(artist);
+        }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Artist not found");
     }
 
     public List<Song> getSongsByAlbum(String album) {
-        return songRepository.getRecordsByAlbum(album);
+        if (album == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Path variable is null");
+        }
+
+        boolean doesAlbumExist =
+                songRepository.findAll().stream().anyMatch(s -> s.getAlbum().equals(album));
+
+        if (doesAlbumExist) {
+            return songRepository.getRecordsByAlbum(album);
+        }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Album not found");
     }
 
     public List<Song> getSongsByGenre(String genre) {
-        return songRepository.getRecordsByGenre(genre);
+        if (genre == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Path variable is null");
+        }
+
+        if (genre.equals("rap")) {
+            genre = "hip-hop/rap";
+        }
+
+        String finalGenre = genre;
+        boolean doesGenreExist =
+                songRepository.findAll().stream().anyMatch(s -> s.getGenre().equals(finalGenre));
+
+        if (doesGenreExist) {
+            return songRepository.getRecordsByGenre(genre);
+        }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Genre not found");
     }
 
     public List<Song> sortByCriteria(SortParameters sortParameters) {

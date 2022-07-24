@@ -5,7 +5,7 @@ function displayItems(songs) {
                 '<li id="' + i + '">' +
                 '<article class="background">' +
                 '<img src="' + songs[i].coverImageUrl + '" alt="album-cover" class="song" width="160" height="160"/>' +
-                '<div>' +
+                '<div class="list-div">' +
                 '<h3>' + songs[i].songName + '</h3>' +
                 '<h5>' + songs[i].artist + '</h5>' +
                 '<p>' + 'Album: ' + songs[i].album + '</p>' +
@@ -22,7 +22,7 @@ function displayItems(songs) {
             '<li id="' + i + '">' +
             '<article class="background">' +
             '<img src="' + songs[i].coverImageUrl + '" alt="album-cover" class="song" width="160" height="160"/>' +
-            '<div>' +
+            '<div class="list-div">' +
             '<h3>' + songs[i].songName + '</h3>' +
             '<h5>' + songs[i].artist + '</h5>' +
             '<p>' + 'Album: ' + songs[i].album + '</p>' +
@@ -62,6 +62,40 @@ function sortSomehow() {
             displayItems(songs);
         })
 }
+
+function getCategories(name) {
+    fetch(`http://localhost:8080/api/v1/songs/${name}`)
+        .then(
+            response => response.json()
+        ).then(
+        songs => {
+            for (let i = 0; i < songs.length; i++) {
+                document.getElementById(name).innerHTML +=
+                    '<option value="' + songs[i] + '">' + songs[i] + '</option>';
+            }
+        }
+    );
+}
+
+function displaySongsByCategory(name, category) {
+    if (category === "hip-hop/rap") {
+        category = "rap";
+    }
+
+    fetch(`http://localhost:8080/api/v1/songs/search/${name}/${category}`)
+        .then(
+            response => response.json()
+        ).then(
+        songs => {
+            clearHTML();
+            displayItems(songs);
+        }
+    );
+}
+
+getCategories("artists");
+getCategories("albums");
+getCategories("genres");
 
 fetch("http://localhost:8080/api/v1/songs")
     .then(
