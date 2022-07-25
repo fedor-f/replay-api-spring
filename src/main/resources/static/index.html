@@ -13,18 +13,23 @@
 <h2>Search</h2><br>
 
 <label for="artists">Artists: </label>
-<select name="artists" id="artists"></select>
-<button type="button" onclick="displaySongsByCategory('artists', document.getElementById('artists').value)">Search</button>
+<select name="artists" id="artists">
+</select>
+<button type="button" id="art-search" onclick="next('alb-label', 'albums', 'alb-search')">Next</button>
 <br>
 
-<label for="albums">Albums: </label>
-<select name="albums" id="albums"></select>
-<button type="button" onclick="displaySongsByCategory('albums', document.getElementById('albums').value)">Search</button>
+<label for="albums" id="alb-label" style="display: none;">Albums: </label>
+<select name="albums" id="albums" style="display: none;">
+</select>
+<button type="button" onclick="next('gen-label', 'genres', 'gen-search')" id="alb-search" style="display: none;">
+    Next
+</button>
 <br>
 
-<label for="genres">Genres: </label>
-<select name="genres" id="genres"></select>
-<button type="button" onclick="displaySongsByCategory('genres', document.getElementById('genres').value)">Search</button>
+<label for="genres" id="gen-label" style="display: none;">Genres: </label>
+<select name="genres" id="genres" style="display: none;">
+</select>
+<button type="button" id="gen-search" onclick="search()" style="display: none;">Search</button>
 <br>
 
 <h2>Sort</h2>
@@ -42,7 +47,8 @@
     <option value="descending">Descending</option>
 </select>
 
-<button type="button" onclick="sortSomehow()">Sort</button><br>
+<button type="button" onclick="sortSomehow()">Sort</button>
+<br>
 
 <div id="container">
     <ul id="list"></ul>

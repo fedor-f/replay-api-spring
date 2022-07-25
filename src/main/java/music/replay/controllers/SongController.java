@@ -1,7 +1,7 @@
 package music.replay.controllers;
 
+import music.replay.models.SearchSortParameters;
 import music.replay.models.Song;
-import music.replay.models.SortParameters;
 import music.replay.services.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +30,8 @@ public class SongController {
     }
 
     @PostMapping("/sort")
-    public List<Song> getSortedListByCriteria(@RequestBody SortParameters sortParameters) {
-        return songService.sortByCriteria(sortParameters);
+    public List<Song> getSortedListByCriteria(@RequestBody SearchSortParameters searchSortParameters) {
+        return songService.sortByCriteria(searchSortParameters);
     }
 
     @DeleteMapping
@@ -72,5 +72,10 @@ public class SongController {
     @GetMapping("/search/genres/{genre}")
     public List<Song> getSongsByGenre(@PathVariable String genre) {
         return songService.getSongsByGenre(genre);
+    }
+
+    @PostMapping("/search")
+    public List<Song> searchByParams(@RequestBody SearchSortParameters searchSortParameters) {
+        return songService.getSongsBySearchParameters(searchSortParameters);
     }
 }

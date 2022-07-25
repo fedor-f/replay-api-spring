@@ -45,7 +45,13 @@ function sortSomehow() {
     let el2 = document.getElementById("order");
     let ord = el2.options[el2.selectedIndex].text;
 
-    let sortParams = {criteria: crit, order: ord};
+    let info = {
+        criteria: crit,
+        order: ord,
+        artistParam: document.getElementById('artists').value,
+        albumParam: document.getElementById('albums').value,
+        genreParam: document.getElementById('genres').value
+    };
 
     fetch("http://localhost:8080/api/v1/songs/sort",
         {
@@ -54,7 +60,7 @@ function sortSomehow() {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(sortParams)
+            body: JSON.stringify(info)
         })
         .then(response => response.json())
         .then(songs => {
@@ -77,20 +83,35 @@ function getCategories(name) {
     );
 }
 
-function displaySongsByCategory(name, category) {
-    if (category === "hip-hop/rap") {
-        category = "rap";
-    }
+function next(label, category, search, selectedValue) {
+    document.getElementById(label).style.display = 'inline';
+    document.getElementById(category).style.display = 'inline';
+    document.getElementById(search).style.display = 'inline';
+}
 
-    fetch(`http://localhost:8080/api/v1/songs/search/${name}/${category}`)
-        .then(
-            response => response.json()
-        ).then(
-        songs => {
+function search() {
+    let searchParams = {
+        criteria: null,
+        order: null,
+        artistParam: document.getElementById('artists').value,
+        albumParam: document.getElementById('albums').value,
+        genreParam: document.getElementById('genres').value
+    };
+
+    fetch("http://localhost:8080/api/v1/songs/search",
+        {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(searchParams)
+        })
+        .then(response => response.json())
+        .then(songs => {
             clearHTML();
             displayItems(songs);
-        }
-    );
+        })
 }
 
 getCategories("artists");

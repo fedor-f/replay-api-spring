@@ -1,7 +1,7 @@
 package music.replay.services;
 
+import music.replay.models.SearchSortParameters;
 import music.replay.models.Song;
-import music.replay.models.SortParameters;
 import music.replay.parser.SortParser;
 import music.replay.repositories.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,21 +152,32 @@ public class SongService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Genre not found");
     }
 
-    public List<Song> sortByCriteria(SortParameters sortParameters) {
-        if (sortParameters == null) {
+    public List<Song> sortByCriteria(SearchSortParameters searchSortParameters) {
+        if (searchSortParameters == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request body is null");
         }
 
         try {
-            SortParser.parseSortParams(sortParameters);
+            SortParser.parseSortParams(searchSortParameters);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not resolve the given criteria");
         }
 
-        if (sortParameters.getOrder().equals("Ascending")) {
-            return songRepository.getSortedRecords(Sort.by(sortParameters.getCriteria()));
+        if (searchSortParameters.getOrder().equals("Ascending")) {
+            return songRepository.getSortedRecords(searchSortParameters.getArtistParam(),
+                    searchSortParameters.getAlbumParam(),
+                    searchSortParameters.getGenreParam(),
+                    Sort.by(searchSortParameters.getCriteria()));
         }
 
-        return songRepository.getSortedRecords(Sort.by(sortParameters.getCriteria()).descending());
+        return songRepository.getSortedRecords(searchSortParameters.getArtistParam(),
+                searchSortParameters.getAlbumParam(),
+                searchSortParameters.getGenreParam(),
+                Sort.by(searchSortParameters.getCriteria()).descending());
+    }
+
+    public List<Song> getSongsBySearchParameters(SearchSortParameters searchSortParameters) {
+        return songRepository.getSongsByParameters(searchSortParameters.getArtistParam(),
+                searchSortParameters.getAlbumParam(), searchSortParameters.getGenreParam());
     }
 }
