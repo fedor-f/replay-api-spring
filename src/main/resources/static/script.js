@@ -2,14 +2,15 @@ function displayItems(songs) {
     for (let i = 0; i < songs.length; i++) {
         if (i === 0) {
             document.getElementById('list').innerHTML +=
-                '<li id="' + i + '">' +
+                '<li id="' + songs[i].id + '">' +
                 '<article class="background">' +
                 '<img src="' + songs[i].coverImageUrl + '" alt="album-cover" class="song" width="160" height="160"/>' +
-                '<div class="list-div">' +
-                '<h3>' + songs[i].songName + '</h3>' +
-                '<h5>' + songs[i].artist + '</h5>' +
-                '<p>' + 'Album: ' + songs[i].album + '</p>' +
-                '<p>' + 'Pitchfork rating: ' + songs[i].pitchforkAlbumRating + '</p>' +
+                '<div class="list-div" id="div' + songs[i].id + '">' +
+                '<h3 id="song' + songs[i].id + '">' + songs[i].songName + '</h3>' +
+                '<h5 id="artist' + songs[i].id +'">' + songs[i].artist + '</h5>' +
+                '<p id="album' + songs[i].id + '">' + 'Album: ' + songs[i].album + '</p>' +
+                '<p id="rating' + songs[i].id + '">' + 'Pitchfork rating: ' + songs[i].pitchforkAlbumRating + '</p>' +
+                '<button id="' + songs[i].id + '" type="button" class="delete" onclick="deleteRecord()" style="display: none;">' + 'Delete' + '</button>' +
                 '</div>' +
                 '</article>' +
                 '</li>';
@@ -19,18 +20,45 @@ function displayItems(songs) {
 
         document.getElementById('list').innerHTML +=
             '<br>' +
-            '<li id="' + i + '">' +
+            '<li id="' + songs[i].id + '">' +
             '<article class="background">' +
             '<img src="' + songs[i].coverImageUrl + '" alt="album-cover" class="song" width="160" height="160"/>' +
-            '<div class="list-div">' +
-            '<h3>' + songs[i].songName + '</h3>' +
-            '<h5>' + songs[i].artist + '</h5>' +
-            '<p>' + 'Album: ' + songs[i].album + '</p>' +
-            '<p>' + 'Pitchfork rating: ' + songs[i].pitchforkAlbumRating + '</p>' +
+            '<div class="list-div" id="div' + songs[i].id + '">' +
+            '<h3 id="song' + songs[i].id + '">' + songs[i].songName + '</h3>' +
+            '<h5 id="artist' + songs[i].id +'">' + songs[i].artist + '</h5>' +
+            '<p id="album' + songs[i].id + '">' + 'Album: ' + songs[i].album + '</p>' +
+            '<p id="rating' + songs[i].id + '">' + 'Pitchfork rating: ' + songs[i].pitchforkAlbumRating + '</p>' +
+            '<button id="' + songs[i].id + '" type="button" class="delete" onclick="deleteRecord()" style="display: none;">' + 'Delete' + '</button>' +
             '</div>' +
             '</article>' +
             '</li>';
     }
+}
+
+
+
+function deleteRecord() {
+    fetch("http://localhost:8080/api/v1/songs",
+        {
+            method: "DELETE",
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: this.event.target.id
+        })
+        .then(response => response.json())
+        .then(songs => {
+            clearHTML();
+            displayItems(songs);
+
+            let elements = document.getElementsByClassName('delete');
+            for (let i = 0; i < elements.length; i++) {
+                elements[i].style.display = 'inline';
+            }
+
+            document.getElementById('add').style.display = 'inline';
+        })
 }
 
 function clearHTML() {
@@ -131,6 +159,7 @@ function next(label, category, search) {
 }
 
 function search() {
+    document.getElementById('sort').disabled = false;
     let searchParams = {
         criteria: null,
         order: null,
@@ -169,12 +198,77 @@ function showAll() {
     document.getElementById('art-search').disabled = true;
     document.getElementById('alb-search').disabled = true;
     document.getElementById('gen-search').disabled = true;
+
+    hideButtons();
 }
 
 function searchRecords() {
     document.getElementById('art-search').disabled = false;
     document.getElementById('alb-search').disabled = false;
     document.getElementById('gen-search').disabled = false;
+    document.getElementById('add-form').style.display = 'none';
+    document.getElementById('sort').disabled = true;
+
+    hideButtons();
+}
+
+function hideButtons() {
+    let elements = document.getElementsByClassName('delete');
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].style.display = 'none';
+    }
+
+    document.getElementById('add').style.display = 'none';
+}
+
+function add() {
+    document.getElementById('add-form').style.display = 'block';
+}
+
+function submit() {
+    let newSong = {
+        songName: document.getElementById('song-name').value,
+        artist: document.getElementById('artist').value,
+        album: document.getElementById('album').value,
+        releaseDate: document.getElementById('release-date').value,
+        genre: document.getElementById('genre').value,
+        coverImageUrl: document.getElementById('cover').value,
+        pitchforkAlbumRating: document.getElementById('rating').value
+    };
+
+    fetch("http://localhost:8080/api/v1/songs",
+        {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newSong)
+        })
+        .then(response => response.json())
+        .then(songs => {
+            clearHTML();
+            displayItems(songs);
+        })
+}
+
+function editList() {
+    fetch("http://localhost:8080/api/v1/songs")
+        .then(
+            response => response.json()
+        ).then(
+        songs => {
+            clearHTML();
+            displayItems(songs);
+
+            let elements = document.getElementsByClassName('delete');
+            for (let i = 0; i < elements.length; i++) {
+                elements[i].style.display = 'inline';
+            }
+
+            document.getElementById('add').style.display = 'inline';
+        }
+    );
 }
 
 getCategories("artists");

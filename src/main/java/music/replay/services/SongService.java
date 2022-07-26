@@ -32,6 +32,14 @@ public class SongService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request body is null");
         }
 
+        System.out.println(song.getSongName());
+        System.out.println(song.getArtist());
+        System.out.println(song.getAlbum());
+        System.out.println(song.getReleaseDate());
+        System.out.println(song.getGenre());
+        System.out.println(song.getCoverImageUrl());
+        System.out.println(song.getPitchforkAlbumRating());
+
         boolean doesSongNameExist =
                 songRepository.findAll().stream().anyMatch(s -> s.getSongName().equals(song.getSongName()));
         boolean doesAlbumNameExist =

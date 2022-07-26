@@ -15,6 +15,8 @@
 <label for="all-rec">Show all records</label><br>
 <input type="radio" id="search-rec" name="fav_language" value="Search for records" onchange="searchRecords()">
 <label for="search-rec">Search for records</label><br>
+<input type="radio" id="edit-list" name="fav_language" value="Edit list" onchange="editList()">
+<label for="edit-list">Edit list</label><br>
 
 <br>
 
@@ -55,8 +57,36 @@
     <option value="descending">Descending</option>
 </select>
 
-<button type="button" onclick="sortSomehow()">Sort</button>
+<button type="button" id="sort" onclick="sortSomehow()">Sort</button>
 <br>
+<hr>
+
+<button type="button" id="add" onclick="add()" style="display: none;">Add new song</button><br>
+
+<div id="add-form" style="display: none;">
+    <label for="song-name">Song name</label>
+    <input type="text" id="song-name" name="song-name"><br>
+
+    <label for="artist">Artist</label>
+    <input type="text" id="artist" name="artist"><br>
+
+    <label for="album">Album</label>
+    <input type="text" id="album" name="album"><br>
+
+    <label for="release-date">Release date</label>
+    <input type="date" id="release-date" name="artist"><br>
+
+    <label for="genre">Genre</label>
+    <input type="text" id="genre" name="artist"><br>
+
+    <label for="cover">Cover URL</label>
+    <input type="text" id="cover" name="artist"><br>
+
+    <label for="rating">Pitchfork rating</label>
+    <input type="text" id="rating" name="artist"><br>
+
+    <button type="button" value="Submit" onclick="submit()">Submit</button>
+</div><br>
 
 <div id="container">
     <ul id="list"></ul>
