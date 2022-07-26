@@ -38,7 +38,7 @@ function clearHTML() {
     document.getElementById('container').innerHTML = '<ul id="list"></ul>';
 }
 
-function sortSomehow() {
+function sort(artistParam, albumParam, genreParam) {
     let el1 = document.getElementById("criteria");
     let crit = el1.options[el1.selectedIndex].text;
 
@@ -48,9 +48,9 @@ function sortSomehow() {
     let info = {
         criteria: crit,
         order: ord,
-        artistParam: document.getElementById('artists').value,
-        albumParam: document.getElementById('albums').value,
-        genreParam: document.getElementById('genres').value
+        artistParam: artistParam,
+        albumParam: albumParam,
+        genreParam: genreParam
     };
 
     fetch("http://localhost:8080/api/v1/songs/sort",
@@ -69,6 +69,47 @@ function sortSomehow() {
         })
 }
 
+function sortAll() {
+    let el1 = document.getElementById("criteria");
+    let crit = el1.options[el1.selectedIndex].text;
+
+    let el2 = document.getElementById("order");
+    let ord = el2.options[el2.selectedIndex].text;
+
+    let info = {
+        criteria: crit,
+        order: ord,
+        artistParam: 'all',
+        albumParam: 'all',
+        genreParam: 'all'
+    };
+
+    fetch("http://localhost:8080/api/v1/songs/sort",
+        {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(info)
+        })
+        .then(response => response.json())
+        .then(songs => {
+            clearHTML();
+            displayItems(songs);
+        })
+}
+
+function sortSomehow() {
+    if (document.getElementById('all-rec').checked) {
+        sortAll();
+    } else {
+        sort(document.getElementById('artists').value,
+            document.getElementById('albums').value,
+            document.getElementById('genres').value);
+    }
+}
+
 function getCategories(name) {
     fetch(`http://localhost:8080/api/v1/songs/${name}`)
         .then(
@@ -83,7 +124,7 @@ function getCategories(name) {
     );
 }
 
-function next(label, category, search, selectedValue) {
+function next(label, category, search) {
     document.getElementById(label).style.display = 'inline';
     document.getElementById(category).style.display = 'inline';
     document.getElementById(search).style.display = 'inline';
@@ -112,6 +153,28 @@ function search() {
             clearHTML();
             displayItems(songs);
         })
+}
+
+function showAll() {
+    fetch("http://localhost:8080/api/v1/songs")
+        .then(
+            response => response.json()
+        ).then(
+        songs => {
+            clearHTML();
+            displayItems(songs);
+        }
+    );
+
+    document.getElementById('art-search').disabled = true;
+    document.getElementById('alb-search').disabled = true;
+    document.getElementById('gen-search').disabled = true;
+}
+
+function searchRecords() {
+    document.getElementById('art-search').disabled = false;
+    document.getElementById('alb-search').disabled = false;
+    document.getElementById('gen-search').disabled = false;
 }
 
 getCategories("artists");

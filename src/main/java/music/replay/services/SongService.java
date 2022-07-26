@@ -163,14 +163,26 @@ public class SongService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not resolve the given criteria");
         }
 
+        boolean all = searchSortParameters.getArtistParam().equals("all")
+                && searchSortParameters.getAlbumParam().equals("all")
+                && searchSortParameters.getGenreParam().equals("all");
+
+        if (all) {
+            if (searchSortParameters.getOrder().equals("Ascending")) {
+                return songRepository.getAllSortedRecords(Sort.by(searchSortParameters.getCriteria()));
+            }
+
+            return songRepository.getAllSortedRecords(Sort.by(searchSortParameters.getCriteria()).descending());
+        }
+
         if (searchSortParameters.getOrder().equals("Ascending")) {
-            return songRepository.getSortedRecords(searchSortParameters.getArtistParam(),
+            return songRepository.getSortedRecordsByCriteria(searchSortParameters.getArtistParam(),
                     searchSortParameters.getAlbumParam(),
                     searchSortParameters.getGenreParam(),
                     Sort.by(searchSortParameters.getCriteria()));
         }
 
-        return songRepository.getSortedRecords(searchSortParameters.getArtistParam(),
+        return songRepository.getSortedRecordsByCriteria(searchSortParameters.getArtistParam(),
                 searchSortParameters.getAlbumParam(),
                 searchSortParameters.getGenreParam(),
                 Sort.by(searchSortParameters.getCriteria()).descending());

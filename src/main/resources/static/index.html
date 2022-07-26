@@ -10,12 +10,20 @@
 </head>
 <body>
 <h1>Replay</h1><br>
+
+<input type="radio" id="all-rec" name="fav_language" value="Show all records" onchange="showAll()" checked>
+<label for="all-rec">Show all records</label><br>
+<input type="radio" id="search-rec" name="fav_language" value="Search for records" onchange="searchRecords()">
+<label for="search-rec">Search for records</label><br>
+
+<br>
+
 <h2>Search</h2><br>
 
 <label for="artists">Artists: </label>
 <select name="artists" id="artists">
 </select>
-<button type="button" id="art-search" onclick="next('alb-label', 'albums', 'alb-search')">Next</button>
+<button disabled type="button" id="art-search" onclick="next('alb-label', 'albums', 'alb-search')">Next</button>
 <br>
 
 <label for="albums" id="alb-label" style="display: none;">Albums: </label>
