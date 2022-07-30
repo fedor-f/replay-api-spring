@@ -4,6 +4,7 @@ import music.replay.models.RegistrationInfo;
 import music.replay.models.Role;
 import music.replay.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service

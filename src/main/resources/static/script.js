@@ -271,15 +271,48 @@ function editList() {
     );
 }
 
+function adminSection() {
+    fetch("http://localhost:8080/api/v1/users/auth-user")
+        .then(
+            response => response.text()
+        ).then(
+        user => {
+            fetch("http://localhost:8080/api/v1/users/admins")
+                .then(
+                    response => response.json()
+                ).then(
+                admins => {
+                    document.getElementById('user').innerHTML +=
+                        `${user}`;
+
+                    for (let i = 0; i < admins.length; i++) {
+                        if (user === admins[i]) {
+                            document.getElementById('edit-list').style.display = 'inline';
+                            document.getElementById('label-edit-list').style.display = 'inline';
+                            break;
+                        }
+                    }
+                }
+            );
+        }
+    );
+}
+
+function showSongs() {
+    fetch("http://localhost:8080/api/v1/songs")
+        .then(
+            response => response.json()
+        ).then(
+        songs => {
+            displayItems(songs);
+        }
+    );
+}
+
 getCategories("artists");
 getCategories("albums");
 getCategories("genres");
 
-fetch("http://localhost:8080/api/v1/songs")
-    .then(
-        response => response.json()
-    ).then(
-    songs => {
-        displayItems(songs);
-    }
-);
+adminSection();
+
+showSongs();

@@ -1,9 +1,11 @@
 package music.replay.config;
 
+import music.replay.models.Role;
 import music.replay.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,11 +30,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/v1/registration/**").permitAll()
+                .antMatchers("/api/v1/registration").permitAll()
+                .antMatchers("/signUpPage").permitAll()
+                .antMatchers("/redirectLogin").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/songs").hasAuthority(Role.ADMIN.name())
+                .antMatchers(HttpMethod.DELETE, "/api/v1/songs").hasAuthority(Role.ADMIN.name())
+                .antMatchers(HttpMethod.PUT, "/api/v1/songs").hasAuthority(Role.ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin();
+                .formLogin()
+                .loginPage("/loginPage")
+                .permitAll().defaultSuccessUrl("/", true);
     }
 
     @Bean

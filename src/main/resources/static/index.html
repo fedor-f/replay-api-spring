@@ -9,14 +9,16 @@
     <script src="script.js"></script>
 </head>
 <body>
+<h3 id="user"></h3>
+<br><br>
 <h1>Replay</h1><br>
 
 <input type="radio" id="all-rec" name="fav_language" value="Show all records" onchange="showAll()" checked>
 <label for="all-rec">Show all records</label><br>
 <input type="radio" id="search-rec" name="fav_language" value="Search for records" onchange="searchRecords()">
 <label for="search-rec">Search for records</label><br>
-<input type="radio" id="edit-list" name="fav_language" value="Edit list" onchange="editList()">
-<label for="edit-list">Edit list</label><br>
+<input type="radio" id="edit-list" name="fav_language" style="display: none;" value="Edit list" onchange="editList()">
+<label id="label-edit-list" style="display: none;" for="edit-list">Edit list</label><br>
 
 <br>
 
