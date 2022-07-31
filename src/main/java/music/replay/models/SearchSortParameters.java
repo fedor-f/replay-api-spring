@@ -11,7 +11,11 @@ public class SearchSortParameters {
     public SearchSortParameters() {
     }
 
-    public SearchSortParameters(String criteria, String order, String artistParam, String albumParam, String genreParam) {
+    public SearchSortParameters(String criteria,
+                                String order,
+                                String artistParam,
+                                String albumParam,
+                                String genreParam) {
         this.criteria = criteria;
         this.order = order;
         this.artistParam = artistParam;

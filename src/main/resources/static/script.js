@@ -206,7 +206,7 @@ function sortAll() {
 }
 
 function sortSomehow() {
-    if (document.getElementById('all-rec').checked) {
+    if (document.getElementById('all-rec').checked || document.getElementById('edit-list').checked) {
         sortAll();
     } else {
         sort(document.getElementById('artists').value,
@@ -262,6 +262,7 @@ function search() {
 }
 
 function showAll() {
+    document.getElementById('sort').disabled = false;
     fetch("http://localhost:8080/api/v1/songs")
         .then(
             response => response.json()
@@ -330,6 +331,7 @@ function submit() {
 }
 
 function editList() {
+    document.getElementById('sort').disabled = false;
     fetch("http://localhost:8080/api/v1/songs")
         .then(
             response => response.json()
@@ -382,6 +384,39 @@ function showSongs() {
         ).then(
         songs => {
             displayItems(songs);
+        }
+    );
+}
+
+function getFavorites() {
+    document.getElementById('sort').disabled = true;
+    fetch("http://localhost:8080/api/v1/users/auth-user")
+        .then(
+            response => response.text()
+        ).then(
+        user => {
+            let username = {
+                username: user,
+                firstName: null,
+                lastName: null,
+                password: null,
+                role: null
+            };
+
+            fetch("http://localhost:8080/api/v1/songs/favorites",
+                {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(username)
+                })
+                .then(response => response.json())
+                .then(songs => {
+                    clearHTML();
+                    displayItems(songs);
+                })
         }
     );
 }
