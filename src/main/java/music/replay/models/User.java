@@ -1,5 +1,6 @@
 package music.replay.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table(name = "users", schema = "public")
@@ -32,6 +34,13 @@ public class User implements UserDetails {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "favorites",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "song_id"))
+    private List<Song> addedToFavorites;
 
     public User() {
     }
@@ -110,5 +119,13 @@ public class User implements UserDetails {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public List<Song> getAddedToFavorites() {
+        return addedToFavorites;
+    }
+
+    public void setAddedToFavorites(List<Song> addedToFavorites) {
+        this.addedToFavorites = addedToFavorites;
     }
 }

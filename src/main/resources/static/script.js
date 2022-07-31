@@ -7,10 +7,12 @@ function displayItems(songs) {
                 '<img src="' + songs[i].coverImageUrl + '" alt="album-cover" class="song" width="160" height="160"/>' +
                 '<div class="list-div" id="div' + songs[i].id + '">' +
                 '<h3 id="song' + songs[i].id + '">' + songs[i].songName + '</h3>' +
-                '<h5 id="artist' + songs[i].id +'">' + songs[i].artist + '</h5>' +
+                '<h5 id="artist' + songs[i].id + '">' + songs[i].artist + '</h5>' +
                 '<p id="album' + songs[i].id + '">' + 'Album: ' + songs[i].album + '</p>' +
                 '<p id="rating' + songs[i].id + '">' + 'Pitchfork rating: ' + songs[i].pitchforkAlbumRating + '</p>' +
                 '<button id="' + songs[i].id + '" type="button" class="delete" onclick="deleteRecord()" style="display: none;">' + 'Delete' + '</button>' +
+                '<button id="f' + songs[i].id + '" type="button" class="fav" onclick="addToFavorites()">' + 'Add to favorites' + '</button>' +
+                '<button id="d' + songs[i].id + '" type="button" class="fav-del" onclick="removeFromFavorites()">' + 'Remove from favorites' + '</button>' +
                 '</div>' +
                 '</article>' +
                 '</li>';
@@ -25,17 +27,92 @@ function displayItems(songs) {
             '<img src="' + songs[i].coverImageUrl + '" alt="album-cover" class="song" width="160" height="160"/>' +
             '<div class="list-div" id="div' + songs[i].id + '">' +
             '<h3 id="song' + songs[i].id + '">' + songs[i].songName + '</h3>' +
-            '<h5 id="artist' + songs[i].id +'">' + songs[i].artist + '</h5>' +
+            '<h5 id="artist' + songs[i].id + '">' + songs[i].artist + '</h5>' +
             '<p id="album' + songs[i].id + '">' + 'Album: ' + songs[i].album + '</p>' +
             '<p id="rating' + songs[i].id + '">' + 'Pitchfork rating: ' + songs[i].pitchforkAlbumRating + '</p>' +
             '<button id="' + songs[i].id + '" type="button" class="delete" onclick="deleteRecord()" style="display: none;">' + 'Delete' + '</button>' +
+            '<button id="f' + songs[i].id + '" type="button" class="fav" onclick="addToFavorites()">' + 'Add to favorites' + '</button>' +
+            '<button id="d' + songs[i].id + '" type="button" class="fav-del" onclick="removeFromFavorites()">' + 'Remove from favorites' + '</button>' +
             '</div>' +
             '</article>' +
             '</li>';
     }
 }
 
+function removeFromFavorites() {
+    let buttonSongId = this.event.target.id.substring(1);
+    fetch("http://localhost:8080/api/v1/users/auth-user")
+        .then(
+            response => response.text()
+        ).then(
+        user => {
+            fetch("http://localhost:8080/api/v1/users/id",
+                {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json'
+                    },
+                    body: user
+                }
+            ).then(response => response.text())
+                .then(id => {
+                        let info = {userId: id, songId: buttonSongId};
+                        fetch("http://localhost:8080/api/v1/songs/favorites/remove",
+                            {
+                                method: "DELETE",
+                                headers: {
+                                    'Accept': 'application/json, text/plain, */*',
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(info)
+                            })
+                            .then(response => response.text())
+                            .then(songs => {
+                            })
+                    }
+                );
+        }
+    );
+}
 
+function addToFavorites() {
+    let buttonSongId = this.event.target.id.substring(1);
+    fetch("http://localhost:8080/api/v1/users/auth-user")
+        .then(
+            response => response.text()
+        ).then(
+        user => {
+            fetch("http://localhost:8080/api/v1/users/id",
+                {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json'
+                    },
+                    body: user
+                }
+            ).then(response => response.text())
+                .then(id => {
+                    let info = {userId: id, songId: buttonSongId};
+                    console.log(info);
+                    fetch("http://localhost:8080/api/v1/songs/favorites/add",
+                        {
+                            method: "POST",
+                            headers: {
+                                'Accept': 'application/json, text/plain, */*',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(info)
+                        })
+                        .then(response => response.json())
+                        .then(songs => {
+                        })
+                }
+            );
+        }
+    );
+}
 
 function deleteRecord() {
     fetch("http://localhost:8080/api/v1/songs",

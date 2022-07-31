@@ -1,7 +1,9 @@
 package music.replay.services;
 
+import music.replay.models.FavoritesInfo;
 import music.replay.models.SearchSortParameters;
 import music.replay.models.Song;
+import music.replay.models.User;
 import music.replay.parser.SortParser;
 import music.replay.repositories.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Optional;
 
@@ -199,5 +202,17 @@ public class SongService {
     public List<Song> getSongsBySearchParameters(SearchSortParameters searchSortParameters) {
         return songRepository.getSongsByParameters(searchSortParameters.getArtistParam(),
                 searchSortParameters.getAlbumParam(), searchSortParameters.getGenreParam());
+    }
+
+    public List<Song> getFavorites(User name) {
+        return songRepository.getSongsFromFavorites(name.getUsername());
+    }
+
+    public void addToFavorites(FavoritesInfo favoritesInfo) {
+        songRepository.addToFavorites(favoritesInfo.getUserId(), favoritesInfo.getSongId());
+    }
+
+    public void removeFromFavorites(FavoritesInfo favoritesInfo) {
+        songRepository.removeFromFavorites(favoritesInfo.getUserId(), favoritesInfo.getSongId());
     }
 }

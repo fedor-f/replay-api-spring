@@ -3,9 +3,7 @@ package music.replay.controllers;
 import music.replay.models.Role;
 import music.replay.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +26,10 @@ public class UserController {
     @GetMapping("/auth-user")
     public String getAuthenticatedUser() {
         return userService.getAuthenticatedUser();
+    }
+
+    @PostMapping("/id")
+    public Integer getId(@RequestBody String name) {
+        return userService.getIdByName(name);
     }
 }

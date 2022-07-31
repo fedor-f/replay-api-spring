@@ -1,7 +1,9 @@
 package music.replay.controllers;
 
+import music.replay.models.FavoritesInfo;
 import music.replay.models.SearchSortParameters;
 import music.replay.models.Song;
+import music.replay.models.User;
 import music.replay.services.SongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -77,5 +79,20 @@ public class SongController {
     @PostMapping("/search")
     public List<Song> searchByParams(@RequestBody SearchSortParameters searchSortParameters) {
         return songService.getSongsBySearchParameters(searchSortParameters);
+    }
+
+    @PostMapping("/favorites")
+    public List<Song> getFavorites(@RequestBody User name) {
+        return songService.getFavorites(name);
+    }
+
+    @PostMapping("/favorites/add")
+    public void addToFavorites(@RequestBody FavoritesInfo favoritesInfo) {
+        songService.addToFavorites(favoritesInfo);
+    }
+
+    @DeleteMapping("/favorites/remove")
+    public void removeFromFavorites(@RequestBody FavoritesInfo favoritesInfo) {
+        songService.removeFromFavorites(favoritesInfo);
     }
 }

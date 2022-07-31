@@ -1,9 +1,11 @@
 package music.replay.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "topsongsinfo", schema = "public")
@@ -35,6 +37,13 @@ public class Song {
     @Column(name = "pitchforkalbumrating")
     @Nullable
     private float pitchforkAlbumRating;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "favorites",
+            joinColumns = @JoinColumn(name = "song_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> addedByUsers;
 
     public Song() {
     }
@@ -112,5 +121,13 @@ public class Song {
 
     public void setPitchforkAlbumRating(float pitchforkAlbumRating) {
         this.pitchforkAlbumRating = pitchforkAlbumRating;
+    }
+
+    public List<User> getAddedByUsers() {
+        return addedByUsers;
+    }
+
+    public void setAddedByUsers(List<User> addedByUsers) {
+        this.addedByUsers = addedByUsers;
     }
 }
