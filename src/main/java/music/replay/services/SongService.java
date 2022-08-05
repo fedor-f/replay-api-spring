@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.Optional;
 
@@ -200,19 +199,35 @@ public class SongService {
     }
 
     public List<Song> getSongsBySearchParameters(SearchSortParameters searchSortParameters) {
+        if (searchSortParameters == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request body is null");
+        }
+
         return songRepository.getSongsByParameters(searchSortParameters.getArtistParam(),
                 searchSortParameters.getAlbumParam(), searchSortParameters.getGenreParam());
     }
 
     public List<Song> getFavorites(User name) {
+        if (name == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request body is null");
+        }
+
         return songRepository.getSongsFromFavorites(name.getUsername());
     }
 
     public void addToFavorites(FavoritesInfo favoritesInfo) {
+        if (favoritesInfo == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request body is null");
+        }
+
         songRepository.addToFavorites(favoritesInfo.getUserId(), favoritesInfo.getSongId());
     }
 
     public void removeFromFavorites(FavoritesInfo favoritesInfo) {
+        if (favoritesInfo == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request body is null");
+        }
+
         songRepository.removeFromFavorites(favoritesInfo.getUserId(), favoritesInfo.getSongId());
     }
 }

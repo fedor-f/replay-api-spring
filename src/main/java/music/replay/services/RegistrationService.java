@@ -4,7 +4,6 @@ import music.replay.models.RegistrationInfo;
 import music.replay.models.Role;
 import music.replay.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,7 +16,7 @@ public class RegistrationService {
         this.userService = userService;
     }
 
-    public String register(RegistrationInfo userInfo) {
+    public void register(RegistrationInfo userInfo) {
         User user = new User(
                 userInfo.getUsername(),
                 userInfo.getFirstName(),
@@ -26,7 +25,5 @@ public class RegistrationService {
                 Role.USER
         );
         userService.registerUser(user);
-
-        return "success";
     }
 }

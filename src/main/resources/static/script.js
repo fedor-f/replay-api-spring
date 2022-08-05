@@ -12,7 +12,7 @@ function displayItems(songs) {
                 '<p id="rating' + songs[i].id + '">' + 'Pitchfork rating: ' + songs[i].pitchforkAlbumRating + '</p>' +
                 '<button id="' + songs[i].id + '" type="button" class="delete" onclick="deleteRecord()" style="display: none;">' + 'Delete' + '</button>' +
                 '<button id="f' + songs[i].id + '" type="button" class="fav" onclick="addToFavorites()">' + 'Add to favorites' + '</button>' +
-                '<button id="d' + songs[i].id + '" type="button" class="fav-del" onclick="removeFromFavorites()">' + 'Remove from favorites' + '</button>' +
+                '<button id="d' + songs[i].id + '" type="button" class="fav-del" onclick="removeFromFavorites()" disabled>' + 'Remove from favorites' + '</button>' +
                 '</div>' +
                 '</article>' +
                 '</li>';
@@ -32,7 +32,7 @@ function displayItems(songs) {
             '<p id="rating' + songs[i].id + '">' + 'Pitchfork rating: ' + songs[i].pitchforkAlbumRating + '</p>' +
             '<button id="' + songs[i].id + '" type="button" class="delete" onclick="deleteRecord()" style="display: none;">' + 'Delete' + '</button>' +
             '<button id="f' + songs[i].id + '" type="button" class="fav" onclick="addToFavorites()">' + 'Add to favorites' + '</button>' +
-            '<button id="d' + songs[i].id + '" type="button" class="fav-del" onclick="removeFromFavorites()">' + 'Remove from favorites' + '</button>' +
+            '<button id="d' + songs[i].id + '" type="button" class="fav-del" onclick="removeFromFavorites()" disabled>' + 'Remove from favorites' + '</button>' +
             '</div>' +
             '</article>' +
             '</li>';
@@ -41,6 +41,9 @@ function displayItems(songs) {
 
 function removeFromFavorites() {
     let buttonSongId = this.event.target.id.substring(1);
+    document.getElementById(this.event.target.id).disabled = true;
+    document.getElementById(`f${buttonSongId}`).disabled = false;
+
     fetch("http://localhost:8080/api/v1/users/auth-user")
         .then(
             response => response.text()
@@ -69,6 +72,10 @@ function removeFromFavorites() {
                             })
                             .then(response => response.text())
                             .then(songs => {
+                                if (document.getElementById("fav-list").checked) {
+                                    getFavorites();
+                                }
+
                             })
                     }
                 );
@@ -78,6 +85,8 @@ function removeFromFavorites() {
 
 function addToFavorites() {
     let buttonSongId = this.event.target.id.substring(1);
+    document.getElementById(this.event.target.id).disabled = true;
+    document.getElementById(`d${buttonSongId}`).disabled = false
     fetch("http://localhost:8080/api/v1/users/auth-user")
         .then(
             response => response.text()
@@ -94,22 +103,23 @@ function addToFavorites() {
                 }
             ).then(response => response.text())
                 .then(id => {
-                    let info = {userId: id, songId: buttonSongId};
-                    console.log(info);
-                    fetch("http://localhost:8080/api/v1/songs/favorites/add",
-                        {
-                            method: "POST",
-                            headers: {
-                                'Accept': 'application/json, text/plain, */*',
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(info)
-                        })
-                        .then(response => response.json())
-                        .then(songs => {
-                        })
-                }
-            );
+                        let info = {userId: id, songId: buttonSongId};
+                        console.log(info);
+                        fetch("http://localhost:8080/api/v1/songs/favorites/add",
+                            {
+                                method: "POST",
+                                headers: {
+                                    'Accept': 'application/json, text/plain, */*',
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(info)
+                            })
+                            .then(response => response.json())
+                            .then(songs => {
+
+                            })
+                    }
+                );
         }
     );
 }
@@ -128,6 +138,7 @@ function deleteRecord() {
         .then(songs => {
             clearHTML();
             displayItems(songs);
+            handleFavoritesButtons();
 
             let elements = document.getElementsByClassName('delete');
             for (let i = 0; i < elements.length; i++) {
@@ -171,6 +182,7 @@ function sort(artistParam, albumParam, genreParam) {
         .then(songs => {
             clearHTML();
             displayItems(songs);
+            handleFavoritesButtons();
         })
 }
 
@@ -202,6 +214,7 @@ function sortAll() {
         .then(songs => {
             clearHTML();
             displayItems(songs);
+            handleFavoritesButtons();
         })
 }
 
@@ -258,6 +271,7 @@ function search() {
         .then(songs => {
             clearHTML();
             displayItems(songs);
+            handleFavoritesButtons();
         })
 }
 
@@ -270,6 +284,7 @@ function showAll() {
         songs => {
             clearHTML();
             displayItems(songs);
+            handleFavoritesButtons();
         }
     );
 
@@ -286,6 +301,7 @@ function searchRecords() {
     document.getElementById('gen-search').disabled = false;
     document.getElementById('add-form').style.display = 'none';
     document.getElementById('sort').disabled = true;
+    handleFavoritesButtons();
 
     hideButtons();
 }
@@ -327,6 +343,7 @@ function submit() {
         .then(songs => {
             clearHTML();
             displayItems(songs);
+            handleFavoritesButtons();
         })
 }
 
@@ -339,6 +356,7 @@ function editList() {
         songs => {
             clearHTML();
             displayItems(songs);
+            handleFavoritesButtons();
 
             let elements = document.getElementsByClassName('delete');
             for (let i = 0; i < elements.length; i++) {
@@ -384,12 +402,16 @@ function showSongs() {
         ).then(
         songs => {
             displayItems(songs);
+            handleFavoritesButtons();
         }
     );
 }
 
 function getFavorites() {
     document.getElementById('sort').disabled = true;
+    document.getElementById('art-search').disabled = true;
+    document.getElementById('alb-search').disabled = true;
+    document.getElementById('gen-search').disabled = true;
     fetch("http://localhost:8080/api/v1/users/auth-user")
         .then(
             response => response.text()
@@ -416,7 +438,53 @@ function getFavorites() {
                 .then(songs => {
                     clearHTML();
                     displayItems(songs);
+                    handleFavoritesButtons();
                 })
+        }
+    );
+}
+
+function handleFavoritesButtons() {
+    fetch("http://localhost:8080/api/v1/songs")
+        .then(
+            response => response.json()
+        ).then(
+        songs => {
+            fetch("http://localhost:8080/api/v1/users/auth-user")
+                .then(
+                    response => response.text()
+                ).then(
+                user => {
+                    let username = {
+                        username: user,
+                        firstName: null,
+                        lastName: null,
+                        password: null,
+                        role: null
+                    };
+
+                    fetch("http://localhost:8080/api/v1/songs/favorites",
+                        {
+                            method: "POST",
+                            headers: {
+                                'Accept': 'application/json, text/plain, */*',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(username)
+                        })
+                        .then(response => response.json())
+                        .then(songsFav => {
+                            for (let i = 0; i < songsFav.length; i++) {
+                                for (let j = 0; j < songs.length; j++) {
+                                    if (songsFav[i].id === songs[j].id) {
+                                        document.getElementById(`f${songs[j].id}`).disabled = true;
+                                        document.getElementById(`d${songs[j].id}`).disabled = false;
+                                    }
+                                }
+                            }
+                        })
+                }
+            );
         }
     );
 }
