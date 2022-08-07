@@ -7,92 +7,125 @@
     <title>My Replay songs</title>
     <link rel="stylesheet" href="stylesheet.css">
     <script src="script.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
+            integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
+            integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
+            crossorigin="anonymous"></script>
 </head>
 <body>
-<h3 id="user"></h3>
+
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+        <h1>Replay</h1><br>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div id="button-group" class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" id="all-rec" name="fav_language" value="Show all records"
+                       onchange="showAll()" checked>
+                <label for="all-rec" class="btn btn-outline-secondary">Show all records</label>
+
+                <input type="radio" class="btn-check" id="search-rec" name="fav_language" value="Search for records"
+                       onchange="searchRecords()" data-bs-toggle="collapse" data-bs-target="#collapse-search"
+                       aria-expanded="false" aria-controls="collapse-search">
+                <label for="search-rec" class="btn btn-outline-secondary">Search for records</label>
+
+                <input type="radio" class="btn-check" id="fav-list" name="fav_language" value="Favorites"
+                       onchange="getFavorites()">
+                <label id="label-fav-list" for="fav-list" class="btn btn-outline-secondary">Added to favorites</label>
+
+                <input type="radio" class="btn-check" id="edit-list" name="fav_language" style="display: none;"
+                       value="Edit list" onchange="editList()">
+                <label id="label-edit-list" class="btn btn-outline-secondary" style="display: none;"
+                       for="edit-list">Edit list</label>
+            </div>
+        </div>
+        <h3 id="user"></h3>
+    </div>
+</nav>
+
+<div class="collapse" id="collapse-search">
+    <div class="search-div">
+        <h4 id="search-header">Search</h4>
+
+        <label for="artists">Artists: </label>
+        <select class="form-select" name="artists" id="artists">
+        </select>
+        <button class="btn btn-success" disabled type="button" id="art-search"
+                onclick="next('alb-label', 'albums', 'alb-search')">Next
+        </button>
+        <br>
+
+        <label for="albums" id="alb-label" style="display: none;">Albums: </label>
+        <select class="form-select" name="albums" id="albums" style="display: none;">
+        </select>
+        <button class="btn btn-success" type="button" onclick="next('gen-label', 'genres', 'gen-search')"
+                id="alb-search"
+                style="display: none;">
+            Next
+        </button>
+        <br>
+
+        <label for="genres" id="gen-label" style="display: none;">Genres: </label>
+        <select class="form-select" name="genres" id="genres" style="display: none;">
+        </select>
+        <button class="btn btn-success" type="button" id="gen-search" onclick="search()" style="display: none;">Search
+        </button>
+    </div>
+</div>
+
+<br>
+
+<button class="btn btn-primary" type="button" id="add" onclick="add()" style="display: none;">Add new song</button>
 <br><br>
-<h1>Replay</h1><br>
-
-<input type="radio" id="all-rec" name="fav_language" value="Show all records" onchange="showAll()" checked>
-<label for="all-rec">Show all records</label><br>
-<input type="radio" id="search-rec" name="fav_language" value="Search for records" onchange="searchRecords()">
-<label for="search-rec">Search for records</label><br>
-<input type="radio" id="fav-list" name="fav_language" value="Favorites" onchange="getFavorites()">
-<label id="label-fav-list" for="fav-list">Added to favorites</label><br>
-<input type="radio" id="edit-list" name="fav_language" style="display: none;" value="Edit list" onchange="editList()">
-<label id="label-edit-list" style="display: none;" for="edit-list">Edit list</label><br>
-
-<br>
-
-<h2>Search</h2><br>
-
-<label for="artists">Artists: </label>
-<select name="artists" id="artists">
-</select>
-<button disabled type="button" id="art-search" onclick="next('alb-label', 'albums', 'alb-search')">Next</button>
-<br>
-
-<label for="albums" id="alb-label" style="display: none;">Albums: </label>
-<select name="albums" id="albums" style="display: none;">
-</select>
-<button type="button" onclick="next('gen-label', 'genres', 'gen-search')" id="alb-search" style="display: none;">
-    Next
-</button>
-<br>
-
-<label for="genres" id="gen-label" style="display: none;">Genres: </label>
-<select name="genres" id="genres" style="display: none;">
-</select>
-<button type="button" id="gen-search" onclick="search()" style="display: none;">Search</button>
-<br>
-
-<h2>Sort</h2>
-<br>
-<label for="criteria">Criteria: </label>
-<select name="criteria" id="criteria">
-    <option value="default">Most listened</option>
-    <option value="album-rating">Album rating</option>
-    <option value="release-date">Release date</option>
-</select>
-
-<label for="order">Criteria: </label>
-<select name="order" id="order">
-    <option value="ascending">Ascending</option>
-    <option value="descending">Descending</option>
-</select>
-
-<button type="button" id="sort" onclick="sortSomehow()">Sort</button>
-<br>
-<hr>
-
-<button type="button" id="add" onclick="add()" style="display: none;">Add new song</button>
-<br>
 
 <div id="add-form" style="display: none;">
-    <label for="song-name">Song name</label>
-    <input type="text" id="song-name" name="song-name"><br>
+    <label for="song-name">Song name</label><br>
+    <input class="add-form-input" type="text" id="song-name" name="song-name"><br>
 
-    <label for="artist">Artist</label>
-    <input type="text" id="artist" name="artist"><br>
+    <label for="artist">Artist</label><br>
+    <input class="add-form-input" type="text" id="artist" name="artist"><br>
 
-    <label for="album">Album</label>
-    <input type="text" id="album" name="album"><br>
+    <label for="album">Album</label><br>
+    <input class="add-form-input" type="text" id="album" name="album"><br>
 
-    <label for="release-date">Release date</label>
-    <input type="date" id="release-date" name="artist"><br>
+    <label for="release-date">Release date</label><br>
+    <input class="add-form-input" type="date" id="release-date" name="artist"><br>
 
-    <label for="genre">Genre</label>
-    <input type="text" id="genre" name="artist"><br>
+    <label for="genre">Genre</label><br>
+    <input class="add-form-input" type="text" id="genre" name="artist"><br>
 
-    <label for="cover">Cover URL</label>
-    <input type="text" id="cover" name="artist"><br>
+    <label for="cover">Cover URL</label><br>
+    <input class="add-form-input" type="text" id="cover" name="artist"><br>
 
-    <label for="rating">Pitchfork rating</label>
-    <input type="text" id="rating" name="artist"><br>
+    <label for="rating">Pitchfork rating</label><br>
+    <input class="add-form-input" type="text" id="rating" name="artist"><br>
 
-    <button type="button" value="Submit" onclick="submit()">Submit</button>
+    <button class="btn btn-primary" type="button" value="Submit" onclick="submit()">Submit</button>
+    <br><br>
 </div>
-<br>
+<span id="sort-section">
+    <label for="criteria">Criteria: </label>
+    <select class="form-select" name="criteria" id="criteria">
+        <option value="default">Most listened</option>
+        <option value="album-rating">Album rating</option>
+        <option value="release-date">Release date</option>
+    </select>
+
+    <label for="order">Order: </label>
+    <select class="form-select" name="order" id="order">
+        <option value="ascending">Ascending</option>
+        <option value="descending">Descending</option>
+    </select>
+
+    <button class="btn btn-success" type="button" id="sort" onclick="sortSomehow()">Sort</button>
+</span>
+<hr>
 
 <div id="container">
     <ul id="list"></ul>

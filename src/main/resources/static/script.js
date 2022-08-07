@@ -10,9 +10,11 @@ function displayItems(songs) {
                 '<h5 id="artist' + songs[i].id + '">' + songs[i].artist + '</h5>' +
                 '<p id="album' + songs[i].id + '">' + 'Album: ' + songs[i].album + '</p>' +
                 '<p id="rating' + songs[i].id + '">' + 'Pitchfork rating: ' + songs[i].pitchforkAlbumRating + '</p>' +
-                '<button id="' + songs[i].id + '" type="button" class="delete" onclick="deleteRecord()" style="display: none;">' + 'Delete' + '</button>' +
-                '<button id="f' + songs[i].id + '" type="button" class="fav" onclick="addToFavorites()">' + 'Add to favorites' + '</button>' +
-                '<button id="d' + songs[i].id + '" type="button" class="fav-del" onclick="removeFromFavorites()" disabled>' + 'Remove from favorites' + '</button>' +
+                '<div style="position:relative; top:-50px; float: right" class="btn-group" role="group" aria-label="Basic radio toggle button group">' +
+                '<button class="btn btn-secondary" id="f' + songs[i].id + '" type="button" class="fav" onclick="addToFavorites()">' + 'Add to favorites' + '</button>' + '<br>' +
+                '<button class="btn btn-secondary" id="d' + songs[i].id + '" type="button" class="fav-del" onclick="removeFromFavorites()" disabled>' + 'Remove from favorites' + '</button>' +
+                '<button id="' + songs[i].id + '" type="button" class="delete btn btn-danger" onclick="deleteRecord()" style="display: none;">' + 'Delete' + '</button>' +
+                '</div>' +
                 '</div>' +
                 '</article>' +
                 '</li>';
@@ -30,9 +32,11 @@ function displayItems(songs) {
             '<h5 id="artist' + songs[i].id + '">' + songs[i].artist + '</h5>' +
             '<p id="album' + songs[i].id + '">' + 'Album: ' + songs[i].album + '</p>' +
             '<p id="rating' + songs[i].id + '">' + 'Pitchfork rating: ' + songs[i].pitchforkAlbumRating + '</p>' +
-            '<button id="' + songs[i].id + '" type="button" class="delete" onclick="deleteRecord()" style="display: none;">' + 'Delete' + '</button>' +
-            '<button id="f' + songs[i].id + '" type="button" class="fav" onclick="addToFavorites()">' + 'Add to favorites' + '</button>' +
-            '<button id="d' + songs[i].id + '" type="button" class="fav-del" onclick="removeFromFavorites()" disabled>' + 'Remove from favorites' + '</button>' +
+            '<div style="position:relative; top:-50px; float: right" class="btn-group" role="group" aria-label="Basic radio toggle button group">' +
+            '<button class="btn btn-secondary" id="f' + songs[i].id + '" type="button" class="fav" onclick="addToFavorites()">' + 'Add to favorites' + '</button>' + '<br>' +
+            '<button class="btn btn-secondary" id="d' + songs[i].id + '" type="button" class="fav-del" onclick="removeFromFavorites()" disabled>' + 'Remove from favorites' + '</button>' +
+            '<button id="' + songs[i].id + '" type="button" class="delete btn btn-danger" onclick="deleteRecord()" style="display: none;">' + 'Delete' + '</button>' +
+            '</div>' +
             '</div>' +
             '</article>' +
             '</li>';
@@ -291,6 +295,7 @@ function showAll() {
     document.getElementById('art-search').disabled = true;
     document.getElementById('alb-search').disabled = true;
     document.getElementById('gen-search').disabled = true;
+    document.getElementById('add-form').style.display = 'none';
 
     hideButtons();
 }
@@ -316,7 +321,11 @@ function hideButtons() {
 }
 
 function add() {
-    document.getElementById('add-form').style.display = 'block';
+    if (document.getElementById('add-form').style.display === 'block') {
+        document.getElementById('add-form').style.display = 'none'
+    } else {
+        document.getElementById('add-form').style.display = 'block';
+    }
 }
 
 function submit() {
@@ -380,7 +389,8 @@ function adminSection() {
                 ).then(
                 admins => {
                     document.getElementById('user').innerHTML +=
-                        `${user}`;
+                        `Logged in as: <em>${user}</em>  ` +
+                        '<button type="button" class="btn btn-primary" onclick="logout()">Logout</button>';
 
                     for (let i = 0; i < admins.length; i++) {
                         if (user === admins[i]) {
@@ -412,6 +422,9 @@ function getFavorites() {
     document.getElementById('art-search').disabled = true;
     document.getElementById('alb-search').disabled = true;
     document.getElementById('gen-search').disabled = true;
+    document.getElementById('add-form').style.display = 'none';
+    hideButtons();
+
     fetch("http://localhost:8080/api/v1/users/auth-user")
         .then(
             response => response.text()
@@ -487,6 +500,10 @@ function handleFavoritesButtons() {
             );
         }
     );
+}
+
+function logout() {
+    fetch("http://localhost:8080/logout").then(r => r.text()).then();
 }
 
 getCategories("artists");
