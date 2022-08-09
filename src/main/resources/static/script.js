@@ -390,7 +390,7 @@ function adminSection() {
                 admins => {
                     document.getElementById('user').innerHTML +=
                         `Logged in as: <em>${user}</em>  ` +
-                        '<button type="button" class="btn btn-primary" onclick="logout()">Logout</button>';
+                        '<button type="button" class="btn btn-secondary" onclick="location.href=\'/logout\'">Logout</button>';
 
                     for (let i = 0; i < admins.length; i++) {
                         if (user === admins[i]) {
@@ -500,10 +500,6 @@ function handleFavoritesButtons() {
             );
         }
     );
-}
-
-function logout() {
-    fetch("http://localhost:8080/logout").then(r => r.text()).then();
 }
 
 getCategories("artists");

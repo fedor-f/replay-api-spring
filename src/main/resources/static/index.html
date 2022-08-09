@@ -54,17 +54,17 @@
         <h4 id="search-header">Search</h4>
 
         <label for="artists">Artists: </label>
-        <select class="form-select" name="artists" id="artists">
+        <select style="max-width:20%;" class="form-select" name="artists" id="artists">
         </select>
-        <button class="btn btn-success" disabled type="button" id="art-search"
+        <button class="btn btn-secondary" disabled type="button" id="art-search"
                 onclick="next('alb-label', 'albums', 'alb-search')">Next
         </button>
         <br>
 
         <label for="albums" id="alb-label" style="display: none;">Albums: </label>
-        <select class="form-select" name="albums" id="albums" style="display: none;">
+        <select class="form-select" name="albums" id="albums" style="display: none; max-width:20%;">
         </select>
-        <button class="btn btn-success" type="button" onclick="next('gen-label', 'genres', 'gen-search')"
+        <button class="btn btn-secondary" type="button" onclick="next('gen-label', 'genres', 'gen-search')"
                 id="alb-search"
                 style="display: none;">
             Next
@@ -72,16 +72,16 @@
         <br>
 
         <label for="genres" id="gen-label" style="display: none;">Genres: </label>
-        <select class="form-select" name="genres" id="genres" style="display: none;">
+        <select class="form-select" name="genres" id="genres" style="display: none; max-width:20%;">
         </select>
-        <button class="btn btn-success" type="button" id="gen-search" onclick="search()" style="display: none;">Search
+        <button class="btn btn-secondary" type="button" id="gen-search" onclick="search()" style="display: none;">Search
         </button>
     </div>
 </div>
 
 <br>
 
-<button class="btn btn-primary" type="button" id="add" onclick="add()" style="display: none;">Add new song</button>
+<button class="btn btn-secondary" type="button" id="add" onclick="add()" style="display: none;">Add new song</button>
 <br><br>
 
 <div id="add-form" style="display: none;">
@@ -106,24 +106,24 @@
     <label for="rating">Pitchfork rating</label><br>
     <input class="add-form-input" type="text" id="rating" name="artist"><br>
 
-    <button class="btn btn-primary" type="button" value="Submit" onclick="submit()">Submit</button>
+    <button class="btn btn-secondary" type="button" value="Submit" onclick="submit()">Submit</button>
     <br><br>
 </div>
 <span id="sort-section">
     <label for="criteria">Criteria: </label>
-    <select class="form-select" name="criteria" id="criteria">
+    <select style="max-width:20%;" class="form-select" name="criteria" id="criteria">
         <option value="default">Most listened</option>
         <option value="album-rating">Album rating</option>
         <option value="release-date">Release date</option>
     </select>
 
     <label for="order">Order: </label>
-    <select class="form-select" name="order" id="order">
+    <select style="max-width:20%;" class="form-select" name="order" id="order">
         <option value="ascending">Ascending</option>
         <option value="descending">Descending</option>
     </select>
 
-    <button class="btn btn-success" type="button" id="sort" onclick="sortSomehow()">Sort</button>
+    <button class="btn btn-secondary" type="button" id="sort" onclick="sortSomehow()">Sort</button>
 </span>
 <hr>
 
