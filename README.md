@@ -1,6 +1,7 @@
 # replay-api-spring
 
-The project represents a website with some of the most listened songs of the year 2019.<br/><br/>
+The project represents a website with some of the most listened songs of the year 2019.<br/> 
+The records are stored in database (I populated database myself)<br/><br/>
 The project includes: backend based on <strong>Java, REST, Spring framework, Hibernate, PostgreSQL</strong> and frontend – <strong>HTML, CSS, Bootstrap, JavaScript</strong>.<br/>
 
 First, the app suggests a user to sign in or sign up (Spring Security):
